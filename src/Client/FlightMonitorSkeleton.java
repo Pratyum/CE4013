@@ -13,7 +13,7 @@ import java.util.Map;
 import Entity.Skeleton;
 import Entity.SkeletonFunctionInterface;
 import Marshaller.DataMarshaller;
-import Server.FlightImplementation;
+import Entity.FlightImplementation;
 import Server.RequestHistory;
 
 //skeleton of flight monitor (also plays the role of server class)

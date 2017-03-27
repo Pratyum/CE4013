@@ -1,4 +1,5 @@
 package Marshaller;
+import Entity.FacilityDetails;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class DataMarshaller {
 	private final byte floatByte = 6;
 	private final byte flightDetailsByte = 7;
 	private final byte remoteObjByte = 8;
+	private final byte facilityDetailsByte = 9;
 	
 	//combines two byte arrays together
 	public byte[] appendBytes(byte[] bytes1, byte[] bytes2){
@@ -48,6 +50,8 @@ public class DataMarshaller {
 			return new FloatConvertor();
 		case flightDetailsByte:
 			return new FlightDetailsConvertor();
+		case facilityDetailsByte:
+			return new FacilityDetailsConvertor(new FacilityDetails());
 		}
 		return null;
 	}
@@ -61,7 +65,8 @@ public class DataMarshaller {
 		case longByte:
 		case floatByte:
 		case flightDetailsByte:
-			//if null, boolean, integer, long, float, flightDetails
+		case facilityDetailsByte:
+			//if null, boolean, integer, long, float, flightDetails,facilityDetailsByte
 			//get convertor
 			convertor = getConvertor(data[pos.getValue()]);
 			pos.inc();
@@ -141,6 +146,11 @@ public class DataMarshaller {
 		if(data==null)
 			return nullMessage();
 		return appendBytes(new byte[]{flightDetailsByte}, getConvertor(flightDetailsByte).toBytes(data));
+	}
+	public byte[] toMessage(FacilityDetails data){
+		if(data==null)
+			return nullMessage();
+		return appendBytes(new byte[]{facilityDetailsByte}, getConvertor(facilityDetailsByte).toBytes(data));
 	}
 	
 	public byte[] nullMessage(){

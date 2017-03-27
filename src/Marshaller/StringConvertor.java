@@ -31,14 +31,12 @@ public class StringConvertor implements Convertor{
 	//converts from a byte array to a object
 	@Override
 	public Object fromBytes(byte[] bytes) {
-		// TODO Auto-generated method stub
-		return new String(bytes, 0, size);
+		return new String(bytes);
 	}
 
 	//converts from a object to a corresponding byte array
 	@Override
 	public byte[] toBytes(Object data) {
-		// TODO Auto-generated method stub
 		return toBytes((String)data);
 	}
 	

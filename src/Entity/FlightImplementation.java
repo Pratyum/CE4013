@@ -1,4 +1,5 @@
-package Server;
+package Entity;
+import Entity.Flight;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;

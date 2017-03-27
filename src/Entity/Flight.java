@@ -1,4 +1,4 @@
-package Server;
+package Entity;
 //flight class used by the server to hold flight data
 public class Flight {
 	private int iD;

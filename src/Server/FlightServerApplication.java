@@ -1,5 +1,7 @@
 package Server;
 
+import Entity.FlightImplementation;
+import Entity.Flight;
 import java.io.IOException;
 
 //server application for flight project
