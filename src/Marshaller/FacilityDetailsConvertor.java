@@ -13,16 +13,25 @@ import Entity.FacilityDetails;
  */
 public class FacilityDetailsConvertor implements Convertor {
     private FacilityDetails data;
+    private int byte_count;
     public FacilityDetailsConvertor(FacilityDetails data) {
         this.data = data;
+        this.byte_count = getByteCount(data);
     }
     @Override
     public int getByteCount() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return byte_count;
     }
     
+    public void setByteCount(int byte_count){
+        this.byte_count = byte_count;
+    }
     public int getByteCount(FacilityDetails data) {
-    	return  data.getString_name().getBytes().length+ Integer.BYTES + data.getString_location().getBytes().length + new BooleanConvertor().getByteCount() ;
+        try {
+    	return  Integer.BYTES + data.getString_name().getBytes().length + Integer.BYTES + Integer.BYTES +data.getString_location().getBytes().length + new BooleanConvertor().getByteCount() ;        
+        } catch (Exception e) {
+         return Integer.BYTES + 0 + Integer.BYTES +Integer.BYTES + 0 + new BooleanConvertor().getByteCount();   
+        }
     }
 
     @Override
@@ -83,11 +92,14 @@ public class FacilityDetailsConvertor implements Convertor {
 
     @Override
     public byte[] toBytes(Object data) {
+        this.data = (FacilityDetails)data;
+        System.out.println(this.data.getString_name());
+        System.out.println(this.data.getString_location());
     	return toBytes((FacilityDetails)data);
     }
 
     private byte[] toBytes(FacilityDetails data){
-    	byte[] dataBytes = new byte[getByteCount()];
+    	byte[] dataBytes = new byte[getByteCount(data)];
     	byte[] attributeBytes;
     	int position = 0;
 

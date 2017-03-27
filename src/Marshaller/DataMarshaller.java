@@ -58,6 +58,7 @@ public class DataMarshaller {
 	
 	private Convertor getConvertor(byte[] data, Counter pos){
 		Convertor convertor = null;
+                
 		switch(data[pos.getValue()]){
 		case nullByte:
 		case boolByte:
@@ -65,7 +66,6 @@ public class DataMarshaller {
 		case longByte:
 		case floatByte:
 		case flightDetailsByte:
-		case facilityDetailsByte:
 			//if null, boolean, integer, long, float, flightDetails,facilityDetailsByte
 			//get convertor
 			convertor = getConvertor(data[pos.getValue()]);
@@ -93,6 +93,14 @@ public class DataMarshaller {
 			pos.inc();	
 			convertor = arrayConvertor;
 			break;
+                case facilityDetailsByte:
+                    FacilityDetailsConvertor facilityDetailsConvertor = (FacilityDetailsConvertor) getConvertor(data[pos.getValue()]);
+                    pos.inc();
+                    facilityDetailsConvertor.setByteCount(data[pos.getValue()]);
+                    pos.inc();
+                    convertor = facilityDetailsConvertor;
+                    break;
+                    
 		case remoteObjByte:
 			//remote object not implemented
 			break;
@@ -150,7 +158,7 @@ public class DataMarshaller {
 	public byte[] toMessage(FacilityDetails data){
 		if(data==null)
 			return nullMessage();
-		return appendBytes(new byte[]{facilityDetailsByte}, getConvertor(facilityDetailsByte).toBytes(data));
+		return appendBytes(new byte[]{facilityDetailsByte,(byte)getConvertor(facilityDetailsByte).toBytes(data).length}, getConvertor(facilityDetailsByte).toBytes(data));
 	}
 	
 	public byte[] nullMessage(){
@@ -182,7 +190,7 @@ public class DataMarshaller {
 			//else
 			else{
 				//convert bytes to data using convertor
-				data = convertor.fromBytes(subBytes(message, position.getValue(), position.getValue()+convertor.getByteCount()));
+ 				data = convertor.fromBytes(subBytes(message, position.getValue(), position.getValue()+convertor.getByteCount()));
 				//updates position
 				position.inc(convertor.getByteCount());
 			}
@@ -197,4 +205,19 @@ public class DataMarshaller {
 		//else return data
 		return data;
 	}
+
+//    public static void main(String[] args){
+//        FacilityDetails details = new FacilityDetails();
+//        details.setString_name("Testing");
+//        details.setInt_space(100);
+//        details.setString_location("NBS");
+//        details.setIs_Available(false);
+//        DataMarshaller marshaller = new DataMarshaller();
+//        System.out.println(marshaller.toMessage(details));
+//        FacilityDetails details1 = (FacilityDetails)marshaller.fromMessage(marshaller.toMessage(details));
+//        System.out.println(details1.getString_name());
+//        System.out.println(details1.getString_location());
+//        System.out.println(details1.getInt_space());
+//        System.out.println(details1.isIs_Available());
+//    }
 }

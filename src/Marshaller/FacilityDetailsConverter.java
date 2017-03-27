@@ -10,10 +10,18 @@ package Marshaller;
  * @author pratyumjagannath
  */
 public class FacilityDetailsConverter implements Convertor {
-
+    int size = 0;
     @Override
     public int getByteCount() {
-        return Long.BYTES + Float.BYTES + Integer.BYTES;
+        return size;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 
     @Override
