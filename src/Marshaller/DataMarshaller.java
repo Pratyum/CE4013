@@ -2,21 +2,17 @@ package Marshaller;
 import Entity.FacilityDetails;
 import java.util.ArrayList;
 import java.util.List;
-
-import Entity.FlightDetails;
-
 public class DataMarshaller {
 	//byte representation for data types
-	private final byte nullByte = 0;
-	private final byte boolByte = 1;
-	private final byte integerByte = 2;
-	private final byte longByte = 3;
-	private final byte stringByte = 4;
-	private final byte arrayByte = 5;
-	private final byte floatByte = 6;
-	private final byte flightDetailsByte = 7;
-	private final byte remoteObjByte = 8;
-	private final byte facilityDetailsByte = 9;
+	private final byte null_byte = 0;
+	private final byte bool_byte = 1;
+	private final byte integer_byte = 2;
+	private final byte long_byte = 3;
+	private final byte string_byte = 4;
+	private final byte array_byte = 5;
+	private final byte float_byte = 6;
+	private final byte remoteObjByte = 7;
+	private final byte facilityDetailsByte = 8;
 	
 	//combines two byte arrays together
 	public byte[] appendBytes(byte[] bytes1, byte[] bytes2){
@@ -36,20 +32,18 @@ public class DataMarshaller {
 	//returns the appropriate convert based on data type byte
 	private Convertor getConvertor(byte type){
 		switch(type){
-		case boolByte:
+		case bool_byte:
 			return new BooleanConvertor();
-		case integerByte:
+		case integer_byte:
 			return new IntegerConvertor();
-		case longByte:
+		case long_byte:
 			return new LongConvertor();
-		case stringByte:
+		case string_byte:
 			return new StringConvertor();
-		case arrayByte:
+		case array_byte:
 			return new ArrayConvertor();
-		case floatByte:
+		case float_byte:
 			return new FloatConvertor();
-		case flightDetailsByte:
-			return new FlightDetailsConvertor();
 		case facilityDetailsByte:
 			return new FacilityDetailsConvertor(new FacilityDetails());
 		}
@@ -60,18 +54,12 @@ public class DataMarshaller {
 		Convertor convertor = null;
                 
 		switch(data[pos.getValue()]){
-		case nullByte:
-		case boolByte:
-		case integerByte:
-		case longByte:
-		case floatByte:
-		case flightDetailsByte:
-			//if null, boolean, integer, long, float, flightDetails,facilityDetailsByte
-			//get convertor
-			convertor = getConvertor(data[pos.getValue()]);
-			pos.inc();
-			break;
-		case stringByte:
+		case null_byte:
+		case bool_byte:
+		case integer_byte:
+		case long_byte:
+		case float_byte:
+		case string_byte:
 			//if string
 			//get convertor
 			StringConvertor stringConvertor = (StringConvertor) getConvertor(data[pos.getValue()]);
@@ -81,7 +69,7 @@ public class DataMarshaller {
 			pos.inc();
 			convertor = stringConvertor;
 			break;
-		case arrayByte:
+		case array_byte:
 			//if array
 			//get convertor
 			ArrayConvertor arrayConvertor = (ArrayConvertor) getConvertor(data[pos.getValue()]);
@@ -120,41 +108,36 @@ public class DataMarshaller {
 	//(array type byte)(data type byte of array item)(length of array)(byte array of data)
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public byte[] toMessage(boolean data){
-		return appendBytes(new byte[]{boolByte}, getConvertor(boolByte).toBytes(data));
+		return appendBytes(new byte[]{bool_byte}, getConvertor(bool_byte).toBytes(data));
 	}
 	
 	public byte[] toMessage(int data){
-		return appendBytes(new byte[]{integerByte}, getConvertor(integerByte).toBytes(data));
+		return appendBytes(new byte[]{integer_byte}, getConvertor(integer_byte).toBytes(data));
 	}
 	
 	public byte[] toMessage(long data){
-		return appendBytes(new byte[]{longByte}, getConvertor(longByte).toBytes(data));
+		return appendBytes(new byte[]{long_byte}, getConvertor(long_byte).toBytes(data));
 	}
 	
 	public byte[] toMessage(String data){
 		if(data==null)
 			return nullMessage();
-		return appendBytes(new byte[]{stringByte, (byte)data.length()}, getConvertor(stringByte).toBytes(data));
+		return appendBytes(new byte[]{string_byte, (byte)data.length()}, getConvertor(string_byte).toBytes(data));
 	}
 	
 	public byte[] toMessage(List<Integer> data){
 		if(data==null)
 			return nullMessage();
-		ArrayConvertor convertor = (ArrayConvertor) getConvertor(arrayByte);
-		convertor.setInternalConvertor(getConvertor(integerByte));
+		ArrayConvertor convertor = (ArrayConvertor) getConvertor(array_byte);
+		convertor.setInternalConvertor(getConvertor(integer_byte));
 		convertor.setSize(data.size());
-		return appendBytes(new byte[]{arrayByte, integerByte ,(byte)data.size()}, convertor.toBytes(data));
+		return appendBytes(new byte[]{array_byte, integer_byte ,(byte)data.size()}, convertor.toBytes(data));
 	}
 	
 	public byte[] toMessage(float data){
-		return appendBytes(new byte[]{floatByte}, getConvertor(floatByte).toBytes(data));
+		return appendBytes(new byte[]{float_byte}, getConvertor(float_byte).toBytes(data));
 	}
 	
-	public byte[] toMessage(FlightDetails data){
-		if(data==null)
-			return nullMessage();
-		return appendBytes(new byte[]{flightDetailsByte}, getConvertor(flightDetailsByte).toBytes(data));
-	}
 	public byte[] toMessage(FacilityDetails data){
 		if(data==null)
 			return nullMessage();
@@ -162,7 +145,7 @@ public class DataMarshaller {
 	}
 	
 	public byte[] nullMessage(){
-		return new byte[]{nullByte};
+		return new byte[]{null_byte};
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	

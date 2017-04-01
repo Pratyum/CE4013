@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/Users/pratyumjagannath/NetBeansProjects/CE4013/src/Client/FlightClientApplication.java</file>
+            <file>file:/Users/pratyumjagannath/NetBeansProjects/CE4013/src/Marshaller/SimSocket.java</file>
+            <file>file:/Users/pratyumjagannath/NetBeansProjects/CE4013/src/Entity/FlightImplementation.java</file>
+            <file>file:/Users/pratyumjagannath/NetBeansProjects/CE4013/src/Entity/Booking.java</file>
+            <file>file:/Users/pratyumjagannath/NetBeansProjects/CE4013/src/Entity/FacilityImplementation.java</file>
+            <file>file:/Users/pratyumjagannath/NetBeansProjects/CE4013/src/Client/FlightStub.java</file>
+            <file>file:/Users/pratyumjagannath/NetBeansProjects/CE4013/src/Entity/FlightInterface.java</file>
+            <file>file:/Users/pratyumjagannath/NetBeansProjects/CE4013/src/Server/BookingSkeleton.java</file>
+            <file>file:/Users/pratyumjagannath/NetBeansProjects/CE4013/src/Client/FlightMonitorImplementation.java</file>
+            <file>file:/Users/pratyumjagannath/NetBeansProjects/CE4013/src/Entity/FacilityInterface.java</file>
+            <file>file:/Users/pratyumjagannath/NetBeansProjects/CE4013/src/Entity/SkeletonFunctionInterface.java</file>
+        </group>
+    </open-files>
+</project-private>

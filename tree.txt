@@ -1,0 +1,34 @@
+|____Client
+| |____BookingMonitor.java // To update the Client while montioring
+| |____BookingMonitorSkeleton.java // Helps create the server for updating while monitoring
+| |____BookingClientApplication.java // Main Client Application ( TO ADD )
+| |____udp_client.java // Helper class for the client socket
+|____Entity
+| |____Booking.java // Entity class for bookings
+| |____Facility.java // Entity class for Facilities
+| |____FacilityDetails.java // Entity class for Facility Details (this is used in Data Marshalling)
+| |____FacilityImplementation.java // Client-Side Implementation of the Facility
+| |____FacilityInterface.java // Interface to have for all the Client and server classes
+| |____Skeleton.java // Model Class for making the Skeleton
+| |____SkeletonFunctionInterface.java // Model class to make the function interface
+| |____Stub.java // Entity Class to help with the Tickets
+|____Marshaller
+| |____ArrayConvertor.java // To convert Array to byte[]
+| |____BooleanConvertor.java // To convery bool to byte[]
+| |____Convertor.java // controller class to decide which convertor to use
+| |____Counter.java // Simple counter implementation based on the data type being marshalled
+| |____DataMarshaller.java // Main Data Marshalling class 
+| |____FacilityDetailsConvertor.java // to convert FacilityDetails to byte[]
+| |____FloatConvertor.java // to convert float to byte[]
+| |____IntegerConvertor.java // to convert int to byte[]
+| |____LongConvertor.java // to convert long to byte[]
+| |____SimSocket.java // A dummy socket used for simulating packet loss
+| |____StringConvertor.java // to convery strign to byte[]
+|____Server
+| |____BookingSkeleton.java // Main skeleton class for the server
+| |____FlightMonitorStub.java
+| |____BookingServerApplication.java // Main Server Application (TO ADD)
+| |____FlightSkeleton.java
+| |____RequestHistory.java // This is to help maintain all the requests
+| |____Server.java // Entity class of the server
+| |____udp_server.java // Helper class for the server socket

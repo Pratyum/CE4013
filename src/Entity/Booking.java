@@ -5,8 +5,14 @@
  */
 package Entity;
 
+import Client.BookingMonitor;
+import Client.BookingMonitorSkeleton;
+import Server.BookingSkeleton;
+import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +22,8 @@ import java.util.List;
  * @author pratyumjagannath
  */
 public class Booking extends Stub implements FacilityInterface {
+
+    private String name = "Facility";
 
     public Booking(DatagramSocket socket, InetAddress host, int port) {
         super(socket, host, port);
@@ -48,20 +56,64 @@ public class Booking extends Stub implements FacilityInterface {
 
 
     @Override
-    public Boolean bookFacility(int ID, Date from, Date to) {
+    public int bookFacility(int ID, Date from, Date to) {
+        
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         byte[] parameters = marshaller.toMessage(ID);
-        parameters = marshaller.appendBytes(parameters,marshaller.toMessage(from.toString()));
-        parameters = marshaller.appendBytes(parameters,marshaller.toMessage(to.toString()));
+        parameters = marshaller.appendBytes(parameters,marshaller.toMessage(df.format(from)));
+        parameters = marshaller.appendBytes(parameters,marshaller.toMessage(df.format(to)));
 
-        Boolean result = (Boolean) sendRequest("bookFacility",parameters,Boolean.class);
+        int result = (Integer) sendRequest("bookFacility",parameters,Integer.class);
 
         return result;
 
     }
+    
+    @Override
+    public String viewBooking(int id) {
+        byte[] parameters = marshaller.toMessage(id);
+        
+        String result = (String) sendRequest("viewBooking", parameters, String.class);
+        return result;
+    }
 
     @Override
     public String getName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.name;
     }
+
+    @Override
+    public boolean monitorFacility(int id, long msec) {
+        byte[] parameters = marshaller.toMessage(id);
+        parameters = marshaller.appendBytes(parameters, marshaller.toMessage(msec));
+        //send request
+        Boolean result = (Boolean) sendRequest("monitorFacility", parameters, Boolean.class);
+        if(result==null)
+            result = false;
+        //if successful
+        if(result){
+            //create monitor implementation and skeleton
+            BookingMonitor monitor = new BookingMonitor(id);
+            BookingMonitorSkeleton server = new BookingMonitorSkeleton(socket,monitor);
+            try{
+                server.listen(msec);
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+        }
+        
+        return result;
+    }
+
+    @Override
+    public boolean login(String user, String password) {
+        byte[] parameters = marshaller.toMessage(user);
+        parameters = marshaller.appendBytes(parameters, marshaller.toMessage(password));
+        boolean result = (Boolean) sendRequest("login", parameters, Boolean.class);
+        System.out.println(result);
+        return result;
+    }
+
+
     
 }

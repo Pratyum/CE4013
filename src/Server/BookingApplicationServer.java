@@ -1,12 +1,20 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package Server;
 
-import Entity.FlightImplementation;
-import Entity.Flight;
+import Entity.Facility;
+import Entity.FacilityImplementation;
 import java.io.IOException;
 
-//server application for flight project
-public class FlightServerApplication {
-	public static void main(String[] args){
+/**
+ *
+ * @author pratyumjagannath
+ */
+public class BookingApplicationServer {
+    	public static void main(String[] args){
 		//if no parameter provided
 		if(args.length < 1){
 			//initialize parameter to default
@@ -16,14 +24,13 @@ public class FlightServerApplication {
 		//convert string to port number
 		int port = Integer.parseInt(args[0]);
 		//create flight implementation
-		FlightImplementation flights = new FlightImplementation();
+                FacilityImplementation  facilities = new FacilityImplementation();
 		//add dummy data
-		flights.addFlight(1, new Flight(1, "a", "b", 1000, (float)2.40, 30));
-		flights.addFlight(2, new Flight(2, "a", "b", 1000, (float)2.40, 30));
-		flights.addFlight(3, new Flight(3, "b", "c", 1000, (float)2.40, 30));
-		//create flight skeleton
-		FlightSkeleton skeleton = new FlightSkeleton(flights);
-		
+		facilities.addfacility(new Facility(1, "LT1A", 200, "North Spine", true));
+                facilities.addfacility(new Facility(2, "LT10", 100, "North Spine", true));
+		facilities.addfacility(new Facility(3, "LHS-LT", 150, "South Spine", true));
+
+		BookingSkeleton skeleton = new BookingSkeleton(facilities);
 		//for testing
 		//creates a thread to book/unbook a seat every 1 second
 		/*
@@ -47,6 +54,7 @@ public class FlightServerApplication {
 			//register object on server
 			server.register(skeleton, skeleton.getName());
 			//listen indefinitely
+                        System.out.println("Server Listening at port " + String.format("%d", port));
 			while(true){
 				server.listen();
 			}
@@ -55,4 +63,5 @@ public class FlightServerApplication {
 			e.printStackTrace();
 		}
 	}
+    
 }

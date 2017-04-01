@@ -38,9 +38,12 @@ public class Server {
         	return;
         //get object name
         String name = new String(buffer, 1, nameLength);
+        System.out.println(name);
         //check if object name is valid
-        if(!registry.containsKey(name))
+        if(!registry.containsKey(name)){
+                System.out.println("Not Valid");
         	return;
+        }
         //retrieve object from registry
         //forwards message to retrieved object
         byte[] result = registry.get(name).processMessage(incoming);

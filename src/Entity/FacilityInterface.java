@@ -21,6 +21,15 @@ public interface FacilityInterface {
     public FacilityDetails getFacilities(int id);
 
     //returns the status of the booking for a given ID for a given date period
-    public Boolean bookFacility(int ID, Date from, Date to);
+    public int bookFacility(int id, Date from, Date to);
 
+    //returns the status of monitoring the facility change
+    public boolean monitorFacility(int id, long msec);
+    
+    // Returns the Booking Object
+    public String viewBooking(int id);
+    
+    // Additional Functions 
+    public boolean login(String username, String password);
+    
 }

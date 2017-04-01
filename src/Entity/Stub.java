@@ -12,12 +12,16 @@ import Marshaller.DataMarshaller;
 
 //this abstract class contains methods common for a stub object
 //roles of stub
-//-initiate connection with server JVM
-//-marshalling and sending of parameters
-//-wait for results
-//-unmarshalling of results
-//-return results to caller
+//	-initiate connection with server JVM
+//	-marshalling and sending of parameters
+//	-wait for results
+//	-unmarshalling of results
+//	-return results to caller
 
+/**
+ *
+ * @author pratyumjagannath
+ */
 public abstract class Stub{
 	//socket to send messages
 	protected DatagramSocket socket;
@@ -78,23 +82,23 @@ public abstract class Stub{
 	//header info consist of object name, method name, packet counter
 	protected byte[] createPacketHeader(String methodName){
 		//format (where X is the length of the item):
-		//-length of object name (1 byte)
-		//-object name (X byte)
-		//-length of method name (1 byte)
-		//-method name (X byte)
-		//-length of packet counter string (1 byte)
-		//-packet counter (X byte)
+		//	-length of object name (1 byte)
+		//	-object name (X byte)
+		//	-length of method name (1 byte)
+		//	-method name (X byte)
+		//	-length of packet counter string (1 byte)
+		//	-packet counter (X byte)
 		String counter = Integer.toString(packetCounter);
 		String header = ((char)getName().length()) + getName() +
 				((char)methodName.length()) + methodName +
 				((char)counter.length()) + counter;
+
 		//packet counter is automatically increase for each header generation
 		packetCounter++;
 		return header.getBytes();
 	}
 	
 	protected Object sendRequest(String functionName, byte[] parameters, Class expectedClass){
-		// TODO Auto-generated method stub
 		//create header
 		byte[] message = createPacketHeader(functionName);
 		//append marshaled parameters

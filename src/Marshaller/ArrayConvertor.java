@@ -6,7 +6,7 @@ import java.util.List;
 //implementation of an array (list) convertor
 public class ArrayConvertor implements Convertor{
 	//an internal convertor for converting each item in the array to byte array
-	private Convertor internalConvertor;
+	private Convertor internal_Convertor;
 	//size of the array to be converted
 	private int size;
 	
@@ -17,16 +17,16 @@ public class ArrayConvertor implements Convertor{
 	//getter and setter of private variables
 	/////////////////////////////////////////////////////////////
 	public ArrayConvertor(Convertor internalConvertor, int size){
-		this.internalConvertor = internalConvertor;
+		this.internal_Convertor = internalConvertor;
 		this.size = size;
 	}
 	
 	public Convertor getInternalConvertor() {
-		return internalConvertor;
+		return internal_Convertor;
 	}
 
 	public void setInternalConvertor(Convertor internalConvertor) {
-		this.internalConvertor = internalConvertor;
+		this.internal_Convertor = internalConvertor;
 	}
 
 	public void setSize(int size){
@@ -42,25 +42,25 @@ public class ArrayConvertor implements Convertor{
 	@Override
 	public int getByteCount() {
 		// TODO Auto-generated method stub
-		return internalConvertor.getByteCount()*size;
+		return internal_Convertor.getByteCount()*size;
 	}
 
 	//converts from a byte array to a object
 	@Override
 	public Object fromBytes(byte[] bytes) {
 		// TODO Auto-generated method stub
-		if(internalConvertor==null){
+		if(internal_Convertor==null){
 			return null;
 		}
 		//create a buffer to store bytes of one array item
-		byte[] itemBytes = new byte[internalConvertor.getByteCount()];
+		byte[] itemBytes = new byte[internal_Convertor.getByteCount()];
 		int position = 0;
 		List array = new ArrayList();
 		for(int i=0; i<size; i++){
 			//retrieve subsets of byte array corresponding to one array item
 			System.arraycopy(bytes, position, itemBytes, 0, itemBytes.length);
 			//convert byte array to array item and add to list
-			array.add(internalConvertor.fromBytes(itemBytes));
+			array.add(internal_Convertor.fromBytes(itemBytes));
 			position += itemBytes.length;
 		}
 		//return item array as list
@@ -77,7 +77,7 @@ public class ArrayConvertor implements Convertor{
 	//actual implementation of object to byte array conversion
 	private byte[] toBytes(List data) {
 		// TODO Auto-generated method stub
-		if(internalConvertor==null){
+		if(internal_Convertor==null){
 			return null;
 		}
 		int size = data.size();
@@ -87,7 +87,7 @@ public class ArrayConvertor implements Convertor{
 		//for each item in array
 		for(Object item:data){
 			//convert item to byte array
-			byte[] itemBytes = internalConvertor.toBytes(item);
+			byte[] itemBytes = internal_Convertor.toBytes(item);
 			//add item byte array to buffer
 			System.arraycopy(itemBytes, 0, dataBytes, position, itemBytes.length);
 			position += itemBytes.length;
