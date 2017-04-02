@@ -104,7 +104,7 @@ public class BookingApplicationClient {
             try {
                 //create stimulated socket
                 DatagramSocket socket = new SimSocket(lossRate, networkDelay);
-                //create flight stub
+                //create Facility stub
                 facility = new Booking(socket, InetAddress.getByAddress(addr).getByAddress(addr), port);
                 //request user to login
                 login(facility);
@@ -135,10 +135,10 @@ public class BookingApplicationClient {
                                 List<Integer> fIDs = facility.getID(location, space);
                                 //if empty list is returned
                                 if(fIDs.isEmpty()){
-                                        //display no flights found
+                                        //display no facilities found
                                         System.out.println(Colors.RED +"No matching Facilities found." + Colors.RESET);
                                 }else{
-                                        //else, display list of flight IDs
+                                        //else, display list of Facility IDs
                                         for(int fID:fIDs){
                                                 System.out.println(Colors.GREEN + String.format("ID No : %d",fID) + Colors.RESET);
                                         }
@@ -199,7 +199,7 @@ public class BookingApplicationClient {
                                 //send request to remote object
                                 //if request fail
                                 if(!facility.monitorFacility(fID, duration)){
-                                        //inform user flight ID not found
+                                        //inform user facility ID not found
                                         System.out.println(Colors.RED + "Facility ID not found." + Colors.RESET);
                                 }
                         }

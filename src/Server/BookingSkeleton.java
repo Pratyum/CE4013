@@ -57,11 +57,9 @@ public class BookingSkeleton extends Skeleton {
 			@Override
 			public byte[] resolve(int messageNo, InetAddress sourceAddress, int sourcePort, byte[] data) {
 				//unmarshal parameters from message
-                                System.out.println("In GetID");
 				List objects = (List) marshaller.fromMessage(data);
 				//pass parameter to method implementation
 				//return marshalled reply
-                                System.out.println(ref_facility.getID((String)objects.get(0), (Integer)objects.get(1)));
 				return marshaller.toMessage(ref_facility.getID((String)objects.get(0), (Integer)objects.get(1)));
 			}
 		});
@@ -137,20 +135,17 @@ public class BookingSkeleton extends Skeleton {
 				if(result){
 					//register user
 					ref_facility.registerUser(sourceAddress, user);
-                                        System.out.println("Registered");
 					//clear cache for previous user using the same ip
 					clearCache(sourceAddress);
-                                        System.out.println("Cache Cleared");
 				}
 				//marshal reply
-                                System.out.println("Sending Reply");
 				return marshaller.toMessage(result);
 			}
 		});
                 functionMap.put("viewBooking", new SkeletonFunctionInterface() {
                     @Override
                     public byte[] resolve(int messageNo, InetAddress sourceAddress, int sourcePort, byte[] data) {
-                        //set user of flight implementation
+                        //set user of facility implementation
                         setUser(sourceAddress);
                         //unmarshal parameters from message
                         int iD = (Integer)marshaller.fromMessage(data);
@@ -162,7 +157,7 @@ public class BookingSkeleton extends Skeleton {
                 functionMap.put("cancelBooking", new SkeletonFunctionInterface() {
                     @Override
                     public byte[] resolve(int messageNo, InetAddress sourceAddress, int sourcePort, byte[] data) {
-                        //set user of flight implementation
+                        //set user of facility implementation
                         setUser(sourceAddress);
                         //unmarshal parameters from message
                         int iD = (Integer)marshaller.fromMessage(data);
@@ -186,7 +181,7 @@ public class BookingSkeleton extends Skeleton {
 					try {
 						//if monitor request accepted
 						if(result)
-                                                    //add monitor stub to flight implementation
+                                                    //add monitor stub to facility implementation
                                                     ref_facility.addMonitor(new BookingMonitorClient(new DatagramSocket(), sourceAddress, sourcePort));
 					} catch (SocketException e) {
 						// TODO Auto-generated catch block

@@ -23,7 +23,7 @@ public class BookingApplicationServer {
 		}
 		//convert string to port number
 		int port = Integer.parseInt(args[0]);
-		//create flight implementation
+		//create facility implementation
                 FacilityImplementation  facilities = new FacilityImplementation();
 		//add dummy data
 		facilities.addfacility(new Facility(1, "LT1A", 200, "North Spine", true));
@@ -31,23 +31,7 @@ public class BookingApplicationServer {
 		facilities.addfacility(new Facility(3, "LHS-LT", 150, "South Spine", true));
 
 		BookingSkeleton skeleton = new BookingSkeleton(facilities);
-		//for testing
-		//creates a thread to book/unbook a seat every 1 second
-		/*
-		new Thread(){
-			public void run(){
-				while(true){
-					flights.bookFlight(1, Math.random()>0.5?1:-1);
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-		}.start();
-		//*/
+		
 		try {
 			//create server
 			Server server = new Server(port);

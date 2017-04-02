@@ -82,12 +82,12 @@ public class FacilityImplementation implements FacilityInterface {
 
     @Override
     public int bookFacility(int id, Date from, Date to) {
-        //if flight not found
+        //if facility not found
 		if(!map_facility.containsKey(id)){
 			//return -1
 			return -2;
 		}
-		//if flight has sufficient seats
+		//if facility has sufficient booking time
 		Facility result = map_facility.get(id);
 		if(result.isIs_Available(from , to)){
 			//for addition feature
@@ -141,7 +141,7 @@ public class FacilityImplementation implements FacilityInterface {
                         //return -1
                         return false;
                 }
-                //if flight has sufficient seats
+                //if facility has sufficient booking time
                 Facility ref_facility = map_facility.get(facility_id);
 
                 Pair<Date,Date> dates = ref_facility.getFreeTime(booking_id);
@@ -171,7 +171,7 @@ public class FacilityImplementation implements FacilityInterface {
                         //return -1
                         return false;
                 }
-                //if flight has sufficient seats
+                //if facility has sufficient booking time
                 Facility ref_facility = map_facility.get(facility_id);
                 if(ref_facility.removeFreeTime(booking_id)){
                     user_bookings.get(current_user).remove(booking_id);
@@ -244,14 +244,14 @@ public class FacilityImplementation implements FacilityInterface {
     
 
     private void informMonitor(int int_id, Date from, Date to) {
-        //if no monitor for specified flight ID
+        //if no monitor for specified facility ID
         if(!monitors.containsKey(int_id)){
                 //do nothing
                 return;
         }
         //else
         List<BookingMonitorClient> tempList = new ArrayList(monitors.get(int_id));
-        //loop through monitors for specified flight ID
+        //loop through monitors for specified facility ID
         for(BookingMonitorClient monitor:tempList){
                 //if monitor has not expire
                 if(monitor_end_times.get(monitor) > System.currentTimeMillis()){
@@ -270,7 +270,7 @@ public class FacilityImplementation implements FacilityInterface {
     
     
     public void addMonitor(BookingMonitorInterface monitor) {
-                //if no flight to be monitored
+                //if no facility to be monitored
 		if(monitor_facility_id == null)
 			//return
 			return;
@@ -278,9 +278,9 @@ public class FacilityImplementation implements FacilityInterface {
 		//retrieve monitor parameters
 		int iD = monitor_facility_id;
 		long msec = monitor_period;
-		//clear flight to be monitored
+		//clear facility to be monitored
 		monitor_facility_id = null;
-		//create empty monitor set for flight if set not initialized
+		//create empty monitor set for facility if set not initialized
 		if(!monitors.containsKey(iD)){
 			monitors.put(iD, new HashSet<>());
 		}

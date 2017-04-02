@@ -1,4 +1,5 @@
 package Server;
+import Entity.Colors;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -38,10 +39,9 @@ public class Server {
         	return;
         //get object name
         String name = new String(buffer, 1, nameLength);
-        System.out.println(name);
         //check if object name is valid
         if(!registry.containsKey(name)){
-                System.out.println("Not Valid");
+                System.out.println(Colors.RED + String.format("%s not Valid",name)+ Colors.RESET);
         	return;
         }
         //retrieve object from registry

@@ -59,7 +59,7 @@ public class DataMarshaller {
 		case integer_byte:
 		case long_byte:
 		case float_byte:
-                        //if null, boolean, integer, long, float, flightDetails,facilityDetailsByte
+                        //if null, boolean, integer, long, float,facilityDetailsByte
  			//get convertor
  			convertor = getConvertor(data[pos.getValue()]);
  			pos.inc();
@@ -105,7 +105,7 @@ public class DataMarshaller {
 	//format of message as follows
 	//null
 	//(null type byte)
-	//boolean, int, long, float, flightDetails:
+	//boolean, int, long, float:
 	//(data type byte)(byte array of data)
 	//string:
 	//(string type byte)(length of string)(byte array of data)
