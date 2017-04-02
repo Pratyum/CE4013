@@ -3,6 +3,7 @@ package Entity;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.util.Pair;
 
 /**
  *
@@ -14,7 +15,7 @@ public class Facility {
 	private int int_space;
 	private String string_location;
 	private boolean is_Available;
-        private Map<Date,Date> freetimes;
+        private Map<Integer,Pair<Date,Date>> freetimes;
 
     //Constuctor
     public Facility(int int_id, String string_name, int int_space, String string_location, boolean is_Available) {
@@ -23,7 +24,7 @@ public class Facility {
         this.int_space = int_space;
         this.string_location = string_location;
         this.is_Available = is_Available;
-        this.freetimes = new HashMap<Date, Date>();
+        this.freetimes = new HashMap<>();
     }
 
     //Getters and Setters
@@ -65,19 +66,22 @@ public class Facility {
     }
     public boolean isIs_Available(Date from , Date to) {
         boolean result = true;
-        for(Date from_date : freetimes.keySet()){
-            boolean from_dateAfterFrom = from_date.after(from);
-            boolean from_dateAfterTo = from_date.after(to);
-            boolean to_dateAfterFrom = freetimes.get(from_date).after(from);
-            boolean to_dateAferTo = freetimes.get(from_date).after(to);
-            if(!from_dateAfterFrom && from_dateAfterTo && !to_dateAferTo){
-                System.out.println("Not in available");
+        for (Map.Entry<Integer, Pair<Date, Date>> entry : freetimes.entrySet()) {
+            Integer key = entry.getKey();
+            Pair<Date, Date> value = entry.getValue();
+            if(from.before(value.getValue()) && to.after(value.getKey()))
                 return false;
-            }
-            else if (from_dateAfterFrom && !from_dateAfterTo){
-                System.out.println("Not in available");
-                return false;
-            }
+        }
+        return result;
+    }
+    public boolean isIs_Available(Date from , Date to, int booking_id) {
+        boolean result = true;
+        for (Map.Entry<Integer, Pair<Date, Date>> entry : freetimes.entrySet()) {
+            Integer key = entry.getKey();
+            Pair<Date, Date> value = entry.getValue();
+            if(key != booking_id)
+                if(from.before(value.getValue()) && to.after(value.getKey()))
+                    return false;
         }
         return result;
     }
@@ -96,12 +100,27 @@ public class Facility {
         return details;
     }
 
-    boolean setIs_Available(boolean b, Date from, Date to) {
+    boolean setIs_Available(int booking_id, Date from, Date to) {
         if(isIs_Available(from, to)){
-            this.freetimes.put(from,to);
+            this.freetimes.put(booking_id, new Pair<>(from,to));
             return true;
         }else
             return false;
+    }
+    
+    public Pair<Date,Date> getFreeTime(int booking_id){
+        if(freetimes.containsKey(booking_id)){
+            return freetimes.get(booking_id);
+        }
+        return null;
+    }
+    
+    public boolean removeFreeTime(int booking_id){
+        if(freetimes.containsKey(booking_id)){
+            freetimes.remove(booking_id);
+            return true;
+        }
+        return false;
     }
     
 }

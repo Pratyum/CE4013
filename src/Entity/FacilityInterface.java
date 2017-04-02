@@ -29,7 +29,12 @@ public interface FacilityInterface {
     // Returns the Booking Object
     public String viewBooking(int id);
     
+    //change Booking
+    public boolean changeBooking(int booking_id, int hours_to_posttone);
+    
     // Additional Functions 
     public boolean login(String username, String password);
+    
+    public boolean cancelBooking(int booking_id);
     
 }

@@ -110,7 +110,21 @@ public class Booking extends Stub implements FacilityInterface {
         byte[] parameters = marshaller.toMessage(user);
         parameters = marshaller.appendBytes(parameters, marshaller.toMessage(password));
         boolean result = (Boolean) sendRequest("login", parameters, Boolean.class);
-        System.out.println(result);
+        return result;
+    }
+
+    @Override
+    public boolean changeBooking(int booking_id, int hours_to_posttone) {
+        byte[] parameters = marshaller.toMessage(booking_id);
+        parameters = marshaller.appendBytes(parameters, marshaller.toMessage(hours_to_posttone));
+        boolean result= (Boolean) sendRequest("changeBooking", parameters, Boolean.class);
+        return result;
+    }
+
+    @Override
+    public boolean cancelBooking(int booking_id) {
+        byte[] parameters = marshaller.toMessage(booking_id);
+        boolean result = (Boolean) sendRequest("cancelBooking", parameters, Boolean.class);
         return result;
     }
 

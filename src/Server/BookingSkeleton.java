@@ -81,14 +81,12 @@ public class BookingSkeleton extends Skeleton {
 					return map_facility_history.get(sourceAddress).getReplyMessage();
 				//else
 				}else{
-					//set user of flight implementation
+					//set user of facility implementation
 					setUser(sourceAddress);
 					//unmarshal parameters from message
 					List objects = (List) marshaller.fromMessage(data);
 					//pass parameter to method implementation
 					//marshal reply
-                                        System.out.println((String)objects.get(1));
-                                        System.out.println((String)objects.get(2));
                                         DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
                                         try{
                                             byte[] reply = marshaller.toMessage(ref_facility.bookFacility((Integer)objects.get(0), df.parse((String)objects.get(1)),df.parse((String)objects.get(2))));
@@ -99,6 +97,30 @@ public class BookingSkeleton extends Skeleton {
                                         }catch(ParseException e){
                                             return marshaller.toMessage("Error parsing arguments");
                                         }   
+                                        
+				}
+                    }
+                });
+                functionMap.put("changeBooking", new SkeletonFunctionInterface() {
+                    @Override
+                    public byte[] resolve(int messageNo, InetAddress sourceAddress, int sourcePort, byte[] data) {
+                        //check if request is a repeat
+				if(map_facility_history.containsKey(sourceAddress) && messageNo == map_facility_history.get(sourceAddress).getRequestNo()){
+					//return cached reply
+					return map_facility_history.get(sourceAddress).getReplyMessage();
+				//else
+				}else{
+					//set user of facility implementation
+					setUser(sourceAddress);
+					//unmarshal parameters from message
+					List objects = (List) marshaller.fromMessage(data);
+					//pass parameter to method implementation
+					//marshal reply
+                                        byte[] reply = marshaller.toMessage(ref_facility.changeBooking((Integer)objects.get(0),(Integer)objects.get(1)));
+                                        //cache reply
+                                        map_facility_history.put(sourceAddress, new RequestHistory(messageNo, reply));
+                                        //return marshalled reply
+                                        return reply;
                                         
 				}
                     }
@@ -135,6 +157,18 @@ public class BookingSkeleton extends Skeleton {
                         //pass parameter to method implementation
                         //marshal reply
                         return marshaller.toMessage(ref_facility.viewBooking(iD)); 
+                   }
+                });
+                functionMap.put("cancelBooking", new SkeletonFunctionInterface() {
+                    @Override
+                    public byte[] resolve(int messageNo, InetAddress sourceAddress, int sourcePort, byte[] data) {
+                        //set user of flight implementation
+                        setUser(sourceAddress);
+                        //unmarshal parameters from message
+                        int iD = (Integer)marshaller.fromMessage(data);
+                        //pass parameter to method implementation
+                        //marshal reply
+                        return marshaller.toMessage(ref_facility.cancelBooking(iD)); 
                    }
                 });
                 functionMap.put("monitorFacility", new SkeletonFunctionInterface(){

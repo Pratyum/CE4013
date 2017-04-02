@@ -59,6 +59,11 @@ public class DataMarshaller {
 		case integer_byte:
 		case long_byte:
 		case float_byte:
+                        //if null, boolean, integer, long, float, flightDetails,facilityDetailsByte
+ 			//get convertor
+ 			convertor = getConvertor(data[pos.getValue()]);
+ 			pos.inc();
+                        break;
 		case string_byte:
 			//if string
 			//get convertor

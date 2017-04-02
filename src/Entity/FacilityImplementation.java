@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javafx.util.Pair;
 
 /**
  *
@@ -84,13 +85,13 @@ public class FacilityImplementation implements FacilityInterface {
         //if flight not found
 		if(!map_facility.containsKey(id)){
 			//return -1
-			return -1;
+			return -2;
 		}
 		//if flight has sufficient seats
 		Facility result = map_facility.get(id);
 		if(result.isIs_Available(from , to)){
 			//for addition feature
-                        changeBooking(result, from, to);
+                        changeBooking(result, from, to , booking_id);
 			if(!recordBooking(result.getString_name(),booking_id , from ,to,id)){
 				return -1;
                         }
@@ -126,12 +127,60 @@ public class FacilityImplementation implements FacilityInterface {
             return false;
     }
     
-    private void changeBooking(Facility facility, Date from , Date to){
-        facility.setIs_Available(false,from,to);
+    private void changeBooking(Facility facility, Date from , Date to , int booking_id){
+        facility.setIs_Available(booking_id,from,to);
         informMonitor(facility.getInt_id(),from , to);
     }
     
+    @Override
+    public boolean changeBooking(int booking_id,int hours_to_postpone){
+        if(user_bookings.containsKey(current_user)){
+            if(user_bookings.get(current_user).containsKey(booking_id)){
+                Integer facility_id = Integer.parseInt(user_bookings.get(current_user).get(booking_id).substring(0,user_bookings.get(current_user).get(booking_id).indexOf(' ')));
+                if(!map_facility.containsKey(facility_id)){
+                        //return -1
+                        return false;
+                }
+                //if flight has sufficient seats
+                Facility ref_facility = map_facility.get(facility_id);
 
+                Pair<Date,Date> dates = ref_facility.getFreeTime(booking_id);
+                if(dates == null){
+                    return false;
+                }
+                Pair<Date,Date> new_dates = new Pair(new Date(dates.getKey().getTime() + (long)hours_to_postpone*3600*1000),new Date(dates.getValue().getTime() + (long)hours_to_postpone*3600*1000));
+                if(ref_facility.isIs_Available(new_dates.getKey(), new_dates.getValue(),booking_id)){
+                    changeBooking(ref_facility, new_dates.getKey(), new_dates.getValue(), booking_id);
+                    if(!recordBooking(ref_facility.getString_name(),booking_id , new_dates.getKey() ,new_dates.getValue(),facility_id)){
+                        return false;
+                    }
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+    @Override
+    public boolean cancelBooking(int booking_id) {
+        if(user_bookings.containsKey(current_user)){
+            if(user_bookings.get(current_user).containsKey(booking_id)){
+                Integer facility_id = Integer.parseInt(user_bookings.get(current_user).get(booking_id).substring(0,user_bookings.get(current_user).get(booking_id).indexOf(' ')));
+                if(!map_facility.containsKey(facility_id)){
+                        //return -1
+                        return false;
+                }
+                //if flight has sufficient seats
+                Facility ref_facility = map_facility.get(facility_id);
+                if(ref_facility.removeFreeTime(booking_id)){
+                    user_bookings.get(current_user).remove(booking_id);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     @Override
     public boolean monitorFacility(int id, long msec) {
         if(!map_facility.containsKey(id)){
@@ -139,7 +188,7 @@ public class FacilityImplementation implements FacilityInterface {
                 return false;
         }
         //else
-        //initialized to monitor flight ID
+        //initialized to monitor facility ID
         monitor_facility_id = id;
         //set monitor period;
         monitor_period = msec;
@@ -249,12 +298,4 @@ public class FacilityImplementation implements FacilityInterface {
         }
         
     }
-
-
-
-
-
-
-
-    
 }
